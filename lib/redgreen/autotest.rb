@@ -1,10 +1,10 @@
 Autotest.send(:alias_method, :real_ruby, :ruby)
 Autotest.send(:define_method, :ruby) do |*args|
-    real_ruby + %[ -rrubygems -e "require 'redgreen'" ] 
+    real_ruby + %[ -rrubygems -e "require 'redgreen'" ]
 end
 
-if PLATFORM =~ /win32/ 
-  require 'win32console' 
+if RUBY_PLATFORM =~ /win32/ 
+  require 'win32console'
   Autotest.send(:define_method, :run_tests) do |*args|
       find_files_to_test # failed + changed/affected
       cmd = make_test_cmd @files_to_test
@@ -35,7 +35,7 @@ if PLATFORM =~ /win32/
       @results = @results.join
       handle_results(@results)
     end
-    
+
     Autotest.add_hook(:ran_command) do |at| p
       include Term::ANSIColor
       at.results = at.results.map{ |r| uncolored(r) }
